@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Азбука легенд родного края — для малышей</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Fredoka', 'Comic Sans MS', Arial, sans-serif;
+      background: #fff8e7;
+      background-image:
+        radial-gradient(circle at 10% 20%, #ffe5b4 0%, transparent 25%),
+        radial-gradient(circle at 90% 80%, #c7e9ff 0%, transparent 25%),
+        radial-gradient(circle at 50% 50%, #f0ffe0 0%, transparent 40%);
+      color: #2a1a4a;
+      min-height: 100vh;
+      padding: 16px 12px 60px;
+    }
+
+    /* ===== ОБЛОЖКА ===== */
+    .cover {
+      max-width: 900px;
+      margin: 0 auto 24px;
+      background: linear-gradient(135deg, #ff6b9d 0%, #feca57 50%, #48dbfb 100%);
+      border-radius: 32px;
+      padding: 40px 24px 36px;
+      text-align: center;
+      box-shadow: 0 16px 40px rgba(255,107,157,0.4);
+      position: relative;
+      overflow: hidden;
+      border: 8px solid #fff;
+    }
+    .cover::before, .cover::after {
+      content: "🌈";
+      position: absolute;
+      font-size: 60px;
+      opacity: 0.5;
+    }
+    .cover::before { top: 10px; left: 14px; }
+    .cover::after  { bottom: 10px; right: 14px; }
+
+    .cover h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(32px, 8vw, 62px);
+      color: #fff;
+      text-shadow: 4px 4px 0 #b8479a, 6px 6px 0 rgba(0,0,0,0.15);
+      margin-bottom: 12px;
+      line-height: 1.1;
+      letter-spacing: 2px;
+    }
+    .cover .subtitle {
+      font-size: clamp(16px, 3vw, 22px);
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 18px;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+    }
+    .cover .emojis {
+      font-size: clamp(28px, 6vw, 46px);
+      margin: 14px 0 20px;
+      letter-spacing: 6px;
+    }
+    .cover .date {
+      font-size: 14px;
+      color: #fff;
+      background: rgba(255,255,255,0.25);
+      padding: 12px 18px;
+      border-radius: 16px;
+      display: inline-block;
+      max-width: 620px;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+    .cover button {
+      display: block;
+      margin: 24px auto 0;
+      padding: 18px 44px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      background: #fff;
+      color: #ff6b9d;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 8px 0 #d94b7d, 0 10px 20px rgba(0,0,0,0.2);
+      letter-spacing: 1px;
+    }
+    .cover button:hover { transform: translateY(-3px); box-shadow: 0 11px 0 #d94b7d, 0 14px 24px rgba(0,0,0,0.25); }
+    .cover button:active { transform: translateY(2px); box-shadow: 0 5px 0 #d94b7d; }
+
+    /* ===== ПАНЕЛЬ КНОПОК ===== */
+    .toolbar {
+      max-width: 900px;
+      margin: 0 auto 14px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .toolbar button {
+      padding: 14px 28px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+    }
+    .btn-pdf { background: #ee5a24; box-shadow: 0 5px 0 #b8431a; }
+    .toolbar button:hover { transform: translateY(-2px); }
+    .toolbar button:active { transform: translateY(2px); box-shadow: none; }
+
+    /* ===== АЛФАВИТ ===== */
+    .alphabet {
+      max-width: 900px;
+      margin: 0 auto 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      background: #fff;
+      padding: 14px;
+      border-radius: 24px;
+      box-shadow: 0 6px 20px rgba(255,107,157,0.15);
+      border: 4px solid #ffd6e8;
+    }
+    .alphabet button {
+      width: 46px;
+      height: 46px;
+      border: none;
+      border-radius: 14px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .18s;
+      color: #fff;
+      background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+      box-shadow: 0 4px 0 #4e3fb8;
+    }
+    .alphabet button:hover { transform: translateY(-2px) scale(1.05); }
+    .alphabet button.active {
+      background: linear-gradient(135deg, #feca57, #ff9f43);
+      box-shadow: 0 4px 0 #c97e1a;
+      transform: scale(1.15);
+    }
+
+    /* ===== КАРТОЧКА БУКВЫ ===== */
+    .card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 32px;
+      padding: 32px 28px;
+      box-shadow: 0 12px 36px rgba(108,92,231,0.2);
+      border: 8px solid #fff;
+      position: relative;
+      overflow: hidden;
+      animation: pop .4s ease;
+    }
+    @keyframes pop { from { opacity:0; transform: scale(.95); } to { opacity:1; transform: scale(1); } }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 260px; height: 260px;
+      background: radial-gradient(circle, rgba(254,202,87,0.35), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .letter-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .big-letter {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(110px, 24vw, 180px);
+      line-height: 1;
+      background: linear-gradient(135deg, #ff6b9d, #feca57, #48dbfb);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(4px 4px 0 rgba(255,107,157,0.25));
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-8px);} }
+
+    .illustration {
+      font-size: clamp(70px, 15vw, 120px);
+      animation: bounce 2s ease-in-out infinite;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+    }
+    @keyframes bounce { 0%,100% { transform: translateY(0) rotate(-5deg);} 50% { transform: translateY(-10px) rotate(5deg);} }
+
+    .legend-title {
+      text-align: center;
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(20px, 4vw, 30px);
+      font-weight: 700;
+      color: #6c5ce7;
+      letter-spacing: 1px;
+      margin: 10px 0 22px;
+      padding: 12px 16px;
+      background: #f0ecff;
+      border-radius: 20px;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .legend-text {
+      font-size: clamp(17px, 2.4vw, 21px);
+      line-height: 1.8;
+      color: #2a1a4a;
+      background: #fff9ec;
+      padding: 20px 22px;
+      border-radius: 20px;
+      border: 3px dashed #ffd6a5;
+      font-weight: 500;
+    }
+
+    /* ===== БЛОК ИСТОЧНИКА ===== */
+    .source-panel {
+      margin-top: 22px;
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      background: #e8f8ff;
+      padding: 16px;
+      border-radius: 20px;
+      border: 3px solid #b8e5ff;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .source-panel img {
+      width: 110px;
+      height: 110px;
+      border-radius: 14px;
+      background: #fff;
+      padding: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border: 3px solid #48dbfb;
+    }
+    .source-info {
+      flex: 1;
+      min-width: 200px;
+      text-align: center;
+    }
+    .source-info .label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0984e3;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .source-info .name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #2a1a4a;
+      margin-bottom: 8px;
+    }
+    .source-info a {
+      display: inline-block;
+      padding: 8px 18px;
+      background: #48dbfb;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 3px 0 #0abde3;
+      transition: all .2s;
+    }
+    .source-info a:hover { transform: translateY(-2px); }
+
+    /* ===== НАВИГАЦИЯ ===== */
+    .nav {
+      max-width: 900px;
+      margin: 24px auto 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .nav button {
+      flex: 1;
+      padding: 20px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      color: #fff;
+      transition: all .2s;
+      letter-spacing: 1px;
+    }
+    .nav .prev { background: #a29bfe; box-shadow: 0 6px 0 #6c5ce7; }
+    .nav .next { background: #20bf6b; box-shadow: 0 6px 0 #14854a; }
+    .nav button:hover:not(:disabled) { transform: translateY(-3px); }
+    .nav button:disabled { background: #ddd; box-shadow: 0 6px 0 #bbb; cursor: not-allowed; color: #999; }
+
+    .counter {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 17px;
+      font-weight: 700;
+      color: #6c5ce7;
+      background: #f0ecff;
+      padding: 10px;
+      border-radius: 14px;
+      display: inline-block;
+      min-width: 200px;
+    }
+    .counter-wrap { text-align: center; }
+
+    /* ===== АДАПТИВ ===== */
+    @media (max-width: 600px) {
+      .alphabet button { width: 40px; height: 40px; font-size: 17px; }
+      .card { padding: 22px 16px; }
+      .letter-row { gap: 8px; }
+      .nav button { padding: 16px; font-size: 17px; }
+      .toolbar button { font-size: 16px; padding: 12px 20px; }
+    }
+
+    /* ===== ПЕЧАТЬ ===== */
+    @media print {
+      body { background: #fff; padding: 0; }
+      .cover, .toolbar, .alphabet, .nav, .counter-wrap { display: none !important; }
+      .card { box-shadow: none; border: none; page-break-after: always; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ОБЛОЖКА -->
+  <div class="cover" id="cover">
+    <h1>Азбука легенд<br>родного края</h1>
+    <p class="subtitle">📖 Книга для чтения малышам 📖</p>
+    <div class="emojis">🌟 🏰 🌳 🐿️ 🎨 🚀</div>
+    <p class="date">
+      🎉 30 сентября — День воссоединения 🎉<br>
+      Донецкой и Луганской Народных Республик,<br>
+      Запорожской и Херсонской областей с Россией
+    </p>
+    <button onclick="startReading()">🚀 Открыть книгу</button>
+  </div>
+
+  <!-- КНИГА -->
+  <div id="book" style="display:none;">
+
+    <div class="toolbar">
+      <button class="btn-pdf" onclick="downloadPDF()">📄 Распечатать страницу</button>
+    </div>
+
+    <div class="alphabet" id="alphabetNav"></div>
+    <div class="card" id="card"></div>
+
+    <div class="nav">
+      <button class="prev" id="prevBtn" onclick="prevLetter()">← Назад</button>
+      <button class="next" id="nextBtn" onclick="nextLetter()">Дальше →</button>
+    </div>
+
+    <div class="counter-wrap">
+      <div class="counter" id="counter"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ========== ДАННЫЕ (упрощённые тексты для 1–4 классов) ========== */
+    const lettersData = [
+      { letter: "А", emoji: "🌊", title: "АЙДАР — РЕКА",
+        legend: "Жила-была красивая река. Однажды у неё остановился хан по имени Айдар. Люди полюбили хана и назвали реку его именем. А ещё говорят, что сама царица Екатерина сказала: «Ай, дар Божий!» — так ей понравилась река. Вот так у реки появилось имя.",
+        sourceName: "История Айдарского поселения",
+        sourceUrl: "https://ajdar-r31.gosweb.gosuslugi.ru/o-munitsipalnom-obrazovanii/istoriya/" },
+
+      { letter: "Б", emoji: "🐿️", title: "БЕЛКИНО — ЗЕМЛЯ БЕЛОК",
+        legend: "Давным-давно на этом месте шумел густой лес. В лесу жило много-много белок. Они были пушистые и рыжие, с большими хвостами. Белки показывали людям, где растут ягоды и где бьют родники. Так и назвали это место — Белкино.",
+        sourceName: "Государственный архив РФ",
+        sourceUrl: "https://statearchive.ru" },
+
+      { letter: "В", emoji: "👑", title: "ВИТОР — ДОБРЫЙ ПОМЕЩИК",
+        legend: "Жил-был помещик Виктор Обнинский. Говорят, он подарил свою землю, чтобы построили железную дорогу. Люди были благодарны и назвали станцию его именем. Может, это и сказка, но в ней живёт память о добром человеке.",
+        sourceName: "Большая российская энциклопедия",
+        sourceUrl: "https://old.bigenc.ru" },
+
+      { letter: "Г", emoji: "🎨", title: "ГЛИНА, КОТОРАЯ ПОЁТ",
+        legend: "В деревне Хлуднево люди лепили из глины весёлые игрушки. Глина была тёплая и мягкая. Из неё получались птички, коровки и барышни. Говорили: если поставить птичку на окно — в дом прилетит счастье!",
+        sourceName: "Виртуальный Русский музей",
+        sourceUrl: "https://rusmuseumvrm.ru" },
+
+      { letter: "Д", emoji: "🧸", title: "ДУМИНИЧИ — РОДИНА ИГРУШКИ",
+        legend: "Жил в посёлке Думиничи мастер по имени Думной. Он нашёл волшебную глину и научил людей лепить из неё посуду и игрушки. Его горшки были крепкие, а игрушки — весёлые. Дети их очень любили!",
+        sourceName: "Виртуальный Русский музей",
+        sourceUrl: "https://rusmuseumvrm.ru" },
+
+      { letter: "Е", emoji: "👸", title: "ЕКАТЕРИНА И ДАР",
+        legend: "Однажды царица Екатерина ехала мимо красивой реки. Она ахнула: «Ай, дар Божий!» С тех пор люди стали называть реку Айдаром. Это красивая сказка о том, как прекрасна наша земля.",
+        sourceName: "История Айдарского поселения",
+        sourceUrl: "https://ajdar-r31.gosweb.gosuslugi.ru/o-munitsipalnom-obrazovanii/istoriya/" },
+
+      { letter: "Ж", emoji: "💧", title: "ЖИВАЯ ВОДА",
+        legend: "В Киселёвой балке бьют из-под земли родники. Говорят, вода в них живая и помогает людям. Однажды слепой мальчик умылся этой водой и стал видеть! Вот какая чудесная водичка.",
+        sourceName: "Комсомольская правда — Луганск",
+        sourceUrl: "https://www.lugansk.kp.ru/daily/27767.5/5225522/" },
+
+      { letter: "З", emoji: "🐉", title: "ЗМЕЙ ИЗ СТЕПЕЙ",
+        legend: "В старых сказках рассказывают про змея о трёх головах. Он жил в пещерах у большой реки. Там, где змей проползал, появлялись балки и реки. Это сказка о том, как появилась наша земля.",
+        sourceName: "Новицкий Я.П., «Народная память о Запорожье»",
+        sourceUrl: "https://archive.org/details/o._20200408" },
+
+      { letter: "И", emoji: "✨", title: "ИСЦЕЛЕНИЕ",
+        legend: "Давным-давно у старого дерева люди увидели чудо. Прямо из земли забил новый родник. Вода в нём была целебная. С тех пор это место стало святым, и туда приходят за помощью.",
+        sourceName: "Комсомольская правда — Луганск",
+        sourceUrl: "https://www.lugansk.kp.ru/daily/27767.5/5225522/" },
+
+      { letter: "К", emoji: "🗿", title: "КАМЕННЫЕ БАБЫ",
+        legend: "В степи стоят каменные фигуры. Раньше люди думали, что это окаменевшие великаны. Так их и назвали — каменные бабы. Это память о древних временах.",
+        sourceName: "Новицкий Я.П., «Народная память о Запорожье»",
+        sourceUrl: "https://archive.org/details/o._20200408" },
+
+      { letter: "Л", emoji: "📖", title: "ЛЕГЕНДА",
+        legend: "Слово «легенда» значит «то, что надо прочитать». Так называют старинные истории о героях, чудесах и кладах. Легенда не всегда правда, но в ней живёт память народа.",
+        sourceName: "Гошкевич В.И., «Клады Херсонской губернии»",
+        sourceUrl: "https://library.kr.ua/wp-content/elib/goshkevich/goshkevich-klady.pdf" },
+
+      { letter: "М", emoji: "⚔️", title: "МАМАЙ",
+        legend: "В степях рассказывали про казака Мамая. Он был сильный и смелый. Мамай один мог победить целое войско. Когда людям было трудно, он приходил на помощь и спасал их.",
+        sourceName: "Гошкевич В.И., «Клады Херсонской губернии»",
+        sourceUrl: "https://library.kr.ua/wp-content/elib/goshkevich/goshkevich-klady.pdf" },
+
+      { letter: "Н", emoji: "📚", title: "НАРОДНАЯ ПАМЯТЬ",
+        legend: "Жил на свете добрый человек — Яков Новицкий. Он ходил по сёлам и записывал старинные истории. Спасибо ему — теперь мы знаем, о чём мечтали наши прабабушки и прадедушки.",
+        sourceName: "Новицкий Я.П., «Народная память о Запорожье»",
+        sourceUrl: "https://archive.org/details/o._20200408" },
+
+      { letter: "О", emoji: "🏙️", title: "ОБНИНСК — НАШ ГОРОД",
+        legend: "Наш город назвали в честь помещиков Обнинских. Говорят, один из них был очень добрый. Он помог построить железную дорогу. Так появилось название — Обнинск. Это наш родной город!",
+        sourceName: "АиФ-Калуга — Засекреченный разъезд",
+        sourceUrl: "https://kaluga.aif.ru/society/details/zasekrechennyy_razezd_kak_rodilos_nazvanie_pervogo_naukograda_strany" },
+
+      { letter: "П", emoji: "🌳", title: "ПЯТЬ БРАТЬЕВ",
+        legend: "Росло в балке дерево. У него было пять стволов, как пять братьев. Под деревом люди молились и просили помощи. А рядом забил новый чистый родник.",
+        sourceName: "Комсомольская правда — Луганск",
+        sourceUrl: "https://www.lugansk.kp.ru/daily/27767.5/5225522/" },
+
+      { letter: "Р", emoji: "🛠️", title: "РЕМЕСЛО",
+        legend: "Раньше люди умели делать всё своими руками: лепили, ткали, ковали. Старики говорили: «Кто ремесло знает — тот с голоду не помрёт». И передавали своё умение детям и внукам.",
+        sourceName: "Виртуальный Русский музей",
+        sourceUrl: "https://rusmuseumvrm.ru" },
+
+      { letter: "С", emoji: "⛰️", title: "САУР-МОГИЛА",
+        legend: "В степи есть высокий курган. Говорят, его насыпали казаки над могилой своего атамана Саура. Если беда придёт — богатыри проснутся и защитят родную землю.",
+        sourceName: "Донецкое агентство новостей",
+        sourceUrl: "https://dan-news.ru" },
+
+      { letter: "Т", emoji: "🗺️", title: "ТОПОНИМ",
+        legend: "У каждой реки, горы и села есть имя. Учёные называют эти имена «топонимами». Имя земли хранит память о людях: река Айдар — о хане, Белкино — о белках, Обнинск — о добрых помещиках.",
+        sourceName: "Большая российская энциклопедия",
+        sourceUrl: "https://old.bigenc.ru" },
+
+      { letter: "У", emoji: "⛏️", title: "УГОЛЬ",
+        legend: "Под землёй лежит чёрный уголь — чёрное золото. Его добывают шахтёры. Говорят, в шахте живёт Добрый Шубин. Он помогает честным и трудолюбивым людям.",
+        sourceName: "Донецкое агентство новостей",
+        sourceUrl: "https://dan-news.ru" },
+
+      { letter: "Ф", emoji: "🎭", title: "ФОЛЬКЛОР",
+        legend: "Фольклор — это народная мудрость. Песни, сказки, пословицы. Всё, что люди придумали и передавали друг другу. Это настоящее сокровище!",
+        sourceName: "Новицкий Я.П., «Народная память о Запорожье»",
+        sourceUrl: "https://archive.org/details/o._20200408" },
+
+      { letter: "Х", emoji: "🏝️", title: "ХОРТИЦА",
+        legend: "Есть на Днепре остров Хортица. По сказкам, там жили богатыри. Кто придёт с добрым сердцем — станет сильным. А кто со злым — заблудится.",
+        sourceName: "Новицкий Я.П., «Народная память о Запорожье»",
+        sourceUrl: "https://archive.org/details/o._20200408" },
+
+      { letter: "Ц", emoji: "💦", title: "ЦЕЛЕБНЫЙ ИСТОЧНИК",
+        legend: "В балке бьют чистые родники. Говорят, вода в них целебная. Однажды она помогла слепому мальчику снова видеть. Люди приходят туда с добрыми мыслями.",
+        sourceName: "Комсомольская правда — Луганск",
+        sourceUrl: "https://www.lugansk.kp.ru/daily/27767.5/5225522/" },
+
+      { letter: "Ч", emoji: "🌟", title: "ЧУДО",
+        legend: "Люди рассказывают о чуде, которое случилось у дерева «Пять братьев». Прямо из земли забил новый родник. Чудеса случаются там, где их ждут с верой и добром.",
+        sourceName: "Комсомольская правда — Луганск",
+        sourceUrl: "https://www.lugansk.kp.ru/daily/27767.5/5225522/" },
+
+      { letter: "Ш", emoji: "👷", title: "ДОБРЫЙ ШУБИН",
+        legend: "В шахтах живёт Добрый Шубин. Он старый шахтёр и помогает людям. Если шахтёр услышит его смех — значит, всё хорошо. Шубин оберегает тех, кто честно трудится.",
+        sourceName: "Донецкое агентство новостей",
+        sourceUrl: "https://dan-news.ru" },
+
+      { letter: "Щ", emoji: "💝", title: "ЩЕДРОСТЬ",
+        legend: "Жил в Обнинске добрый помещик. Говорят, он отдал свою землю людям. Может, это и сказка, но в ней живёт память о добром и щедром сердце.",
+        sourceName: "АиФ-Калуга — Засекреченный разъезд",
+        sourceUrl: "https://kaluga.aif.ru/society/details/zasekrechennyy_razezd_kak_rodilos_nazvanie_pervogo_naukograda_strany" },
+
+      { letter: "Ъ", emoji: "🏠", title: "ТВЁРДЫЙ ЗНАК",
+        legend: "Буква «Ъ» не имеет звука. Раньше она стояла в конце слов. Говорили: «Без опоры и слово не стоит». Она как фундамент у дома — невидимая, но очень нужная.",
+        sourceName: "Большая российская энциклопедия",
+        sourceUrl: "https://old.bigenc.ru" },
+
+      { letter: "Ы", emoji: "🎵", title: "БУКВА «Ы»",
+        legend: "Буква «Ы» есть не во всех языках. В народе шутили: «Ы — не буква, а песня». Она звучит в самых главных словах: «мы», «вы», «жить». Без неё не скажешь: «Мы — одна страна!»",
+        sourceName: "Новицкий Я.П., «Народная память о Запорожье»",
+        sourceUrl: "https://archive.org/details/o._20200408" },
+
+      { letter: "Ь", emoji: "🕊️", title: "МЯГКИЙ ЗНАК",
+        legend: "Мягкий знак не звучит, но делает слова мягкими и тёплыми. В народе говорили: «Мягкое слово и кость ломит». Мягкий знак — как доброта в человеке: его не слышно, а с ним теплее.",
+        sourceName: "Государственный архив РФ",
+        sourceUrl: "https://statearchive.ru" },
+
+      { letter: "Э", emoji: "🔍", title: "ЭТНОГРАФ",
+        legend: "Этнограф — это человек, который изучает обычаи и сказки народа. Яков Новицкий ходил по сёлам и записывал старинные истории. Спасибо ему — мы знаем много интересного!",
+        sourceName: "Новицкий Я.П., «Народная память о Запорожье»",
+        sourceUrl: "https://archive.org/details/o._20200408" },
+
+      { letter: "Ю", emoji: "☀️", title: "ЮГ",
+        legend: "Юг — это тёплые степи и ласковое солнце. Там растёт пшеница, зреют арбузы. Говорили: «Юг — всему свету друг». Юг согревает и кормит всю страну.",
+        sourceName: "Гошкевич В.И., «Клады Херсонской губернии»",
+        sourceUrl: "https://library.kr.ua/wp-content/elib/goshkevich/goshkevich-klady.pdf" },
+
+      { letter: "Я", emoji: "💬", title: "ЯЗЫК",
+        legend: "Язык — это то, на чём мы говорим. В языке живут песни и сказки. Говорят: «Язык — душа народа». Если мы бережём язык — мы сохраняем память о своих прадедушках и прабабушках.",
+        sourceName: "Большая российская энциклопедия",
+        sourceUrl: "https://old.bigenc.ru" }
+    ];
+
+    /* ========== ЛОГИКА ========== */
+    let currentIndex = 0;
+
+    function startReading() {
+      document.getElementById('cover').style.display = 'none';
+      document.getElementById('book').style.display = 'block';
+      buildAlphabet();
+      renderLetter(0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function buildAlphabet() {
+      const nav = document.getElementById('alphabetNav');
+      nav.innerHTML = '';
+      lettersData.forEach((item, i) => {
+        const btn = document.createElement('button');
+        btn.textContent = item.letter;
+        btn.onclick = () => { currentIndex = i; renderLetter(i); };
+        btn.id = 'alpha-' + i;
+        nav.appendChild(btn);
+      });
+    }
+
+    function renderLetter(index) {
+      const item = lettersData[index];
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(item.sourceUrl)}&color=6C5CE7&bgcolor=FFFFFF`;
+
+      document.querySelectorAll('.alphabet button').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById('alpha-' + index);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      document.getElementById('card').innerHTML = `
+        <div class="letter-row">
+          <div class="big-letter">${item.letter}</div>
+          <div class="illustration">${item.emoji}</div>
+        </div>
+        <div class="legend-title">${item.title}</div>
+        <div class="legend-text">${item.legend}</div>
+        <div class="source-panel">
+          <img src="${qrUrl}" alt="QR-код источника">
+          <div class="source-info">
+            <div class="label">🔎 Проверь источник</div>
+            <div class="name">${item.sourceName}</div>
+            <a href="${item.sourceUrl}" target="_blank">Открыть сайт</a>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('prevBtn').disabled = (index === 0);
+      document.getElementById('nextBtn').disabled = (index === lettersData.length - 1);
+      document.getElementById('counter').textContent = `📖 Страница ${index + 1} из ${lettersData.length}`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextLetter() {
+      if (currentIndex < lettersData.length - 1) {
+        currentIndex++;
+        renderLetter(currentIndex);
+      }
+    }
+
+    function prevLetter() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderLetter(currentIndex);
+      }
+    }
+
+    /* ========== PDF / ПЕЧАТЬ ========== */
+    function downloadPDF() {
+      window.print();
+    }
+
+    /* Навигация стрелками клавиатуры */
+    document.addEventListener('keydown', (e) => {
+      if (document.getElementById('book').style.display === 'none') return;
+      if (e.key === 'ArrowRight') nextLetter();
+      if (e.key === 'ArrowLeft') prevLetter();
+    });
+  </script>
+
+</body>
+</html>

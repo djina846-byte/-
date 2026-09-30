@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Азбука легенд родного края</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #e8eefc 0%, #f6f2e8 100%);
+      color: #1a2a4a;
+      min-height: 100vh;
+      padding: 20px 12px 60px;
+    }
+
+    /* ===== ТИТУЛЬНАЯ ===== */
+    .cover {
+      max-width: 900px;
+      margin: 0 auto 30px;
+      background: linear-gradient(160deg, #1a2a6c 0%, #2a4a9c 60%, #b8860b 100%);
+      color: #fff;
+      border-radius: 24px;
+      padding: 50px 30px;
+      text-align: center;
+      box-shadow: 0 12px 40px rgba(26, 42, 108, 0.35);
+    }
+    .cover h1 {
+      font-size: clamp(28px, 6vw, 52px);
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .cover h2 {
+      font-size: clamp(16px, 3vw, 22px);
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: #ffe9a8;
+    }
+    .cover .date {
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 640px;
+      margin: 0 auto 22px;
+      opacity: 0.95;
+    }
+    .cover .school {
+      font-size: 15px;
+      border-top: 1px solid rgba(255,255,255,0.3);
+      padding-top: 18px;
+      margin-top: 18px;
+      letter-spacing: 1px;
+    }
+    .cover button {
+      margin-top: 26px;
+      padding: 14px 34px;
+      font-size: 17px;
+      font-weight: bold;
+      background: #ffe9a8;
+      color: #1a2a6c;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    }
+    .cover button:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,0.35); }
+
+    /* ===== ПАНЕЛЬ УПРАВЛЕНИЯ ===== */
+    .toolbar {
+      max-width: 900px;
+      margin: 0 auto 16px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .toolbar button {
+      padding: 11px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      border: 2px solid #1a2a6c;
+      background: #fff;
+      color: #1a2a6c;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toolbar button:hover { background: #1a2a6c; color: #fff; }
+    .toolbar button.active { background: #b8860b; border-color: #b8860b; color: #fff; }
+
+    /* ===== АЛФАВИТНАЯ НАВИГАЦИЯ ===== */
+    .alphabet {
+      max-width: 900px;
+      margin: 0 auto 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      background: #fff;
+      padding: 14px;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(26,42,108,0.08);
+    }
+    .alphabet button {
+      width: 38px;
+      height: 38px;
+      border: 2px solid #1a2a6c;
+      background: #fff;
+      color: #1a2a6c;
+      font-weight: bold;
+      font-size: 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all .18s;
+    }
+    .alphabet button:hover { background: #e8eefc; transform: scale(1.08); }
+    .alphabet button.active { background: #1a2a6c; color: #fff; }
+
+    /* ===== КАРТОЧКА БУКВЫ ===== */
+    .card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 24px;
+      padding: 36px 34px;
+      box-shadow: 0 8px 32px rgba(26,42,108,0.12);
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn .4s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(184,134,11,0.12), transparent 70%);
+      border-radius: 50%;
+    }
+
+    .big-letter {
+      font-size: clamp(90px, 20vw, 160px);
+      font-weight: 900;
+      text-align: center;
+      color: #1a2a6c;
+      line-height: 1;
+      margin-bottom: 8px;
+      text-shadow: 4px 4px 0 #ffe9a8;
+    }
+    .legend-title {
+      text-align: center;
+      font-size: clamp(18px, 3vw, 24px);
+      font-weight: bold;
+      color: #b8860b;
+      letter-spacing: 1px;
+      margin-bottom: 26px;
+      text-transform: uppercase;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 30px;
+      align-items: start;
+    }
+    .legend-text {
+      font-size: 17px;
+      line-height: 1.75;
+      text-align: justify;
+      color: #2a2a2a;
+    }
+    .legend-text::first-letter {
+      font-size: 42px;
+      font-weight: bold;
+      color: #b8860b;
+      float: left;
+      line-height: 0.9;
+      margin: 4px 8px 0 0;
+    }
+
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      background: #f6f2e8;
+      padding: 18px 14px;
+      border-radius: 16px;
+      border: 2px dashed #d4b45a;
+    }
+    .side-panel .qr-label {
+      font-size: 12px;
+      text-align: center;
+      color: #7a6a3a;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .side-panel img {
+      width: 150px;
+      height: 150px;
+      border-radius: 10px;
+      background: #fff;
+      padding: 6px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    .source-box {
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.4;
+      color: #444;
+    }
+    .source-box a {
+      color: #1a2a6c;
+      text-decoration: none;
+      word-break: break-all;
+      font-weight: 600;
+    }
+    .source-box a:hover { text-decoration: underline; }
+
+    /* ===== НАВИГАЦИЯ ВПЕРЁД/НАЗАД ===== */
+    .nav {
+      max-width: 900px;
+      margin: 26px auto 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .nav button {
+      flex: 1;
+      padding: 16px;
+      font-size: 17px;
+      font-weight: bold;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      background: #1a2a6c;
+      color: #fff;
+      transition: all .2s;
+      box-shadow: 0 4px 14px rgba(26,42,108,0.25);
+    }
+    .nav button:hover:not(:disabled) { background: #2a4a9c; transform: translateY(-2px); }
+    .nav button:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; }
+
+    .counter {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 14px;
+      color: #7a7a7a;
+      letter-spacing: 1px;
+    }
+
+    /* ===== АДАПТИВ ===== */
+    @media (max-width: 680px) {
+      .content-grid { grid-template-columns: 1fr; }
+      .side-panel { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+      .card { padding: 24px 18px; }
+      .alphabet button { width: 34px; height: 34px; font-size: 13px; }
+      .toolbar button { font-size: 13px; padding: 9px 14px; }
+    }
+
+    /* ===== ПЕЧАТЬ / PDF ===== */
+    @media print {
+      body { background: #fff; padding: 0; }
+      .cover, .toolbar, .alphabet, .nav, .counter { display: none !important; }
+      .card {
+        box-shadow: none;
+        border-radius: 0;
+        padding: 20mm 15mm;
+        max-width: 100%;
+        page-break-after: always;
+      }
+      .big-letter { font-size: 120px; }
+      .side-panel { border: 1px solid #ccc; }
+      a { color: #000; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ТИТУЛЬНАЯ СТРАНИЦА -->
+  <div class="cover" id="cover">
+    <h1>АЗБУКА ЛЕГЕНД<br>РОДНОГО КРАЯ</h1>
+    <h2>Электронный сборник творческих работ</h2>
+    <p class="date">
+      30 сентября — День воссоединения<br>
+      Донецкой Народной Республики, Луганской Народной Республики,<br>
+      Запорожской области и Херсонской области с Российской Федерацией
+    </p>
+    <p class="school">МБОУ «Средняя общеобразовательная школа №5» г. Обнинска · 2026</p>
+    <button onclick="startReading()">Открыть сборник →</button>
+  </div>
+
+  <!-- ОСНОВНОЙ КОНТЕНТ -->
+  <div id="book" style="display:none;">
+
+    <!-- ПАНЕЛЬ УПРАВЛЕНИЯ -->
+    <div class="toolbar">
+      <button onclick="downloadPDF()" title="Сохранить или распечатать">
+        📄 Скачать PDF
+      </button>
+      <button id="speakBtn" onclick="toggleSpeak()" title="Озвучить легенду">
+        🔊 Озвучить легенду
+      </button>
+      <button onclick="stopSpeak()" title="Остановить озвучивание">
+        ⏹ Остановить
+      </button>
+    </div>
+
+    <div class="alphabet" id="alphabetNav"></div>
+    <div class="card" id="card"></div>
+    <div class="nav">
+      <button id="prevBtn" onclick="prevLetter()">← Назад</button>
+      <button id="nextBtn" onclick="nextLetter()">Вперёд →</button>
+    </div>
+    <div class="counter" id="counter"></div>
+  </div>
+
+  <script>
+    /* ========== ДАННЫЕ ========== */
+    const lettersData = [
+      { letter: "А", title: "АЙДАР — ЛУННАЯ РЕКА",
+        legend: "Давным-давно, когда по бескрайним степям кочевали татарские ханы, один из них — хан Айдар — остановился со своим войском у красивой реки. Местные жители так полюбили эти края, что назвали реку его именем. Но есть и другая легенда. Будто сама императрица Екатерина II, проезжая мимо, воскликнула: «Ай, дар Божий!» — так восхитила её красота здешней природы. Название реки Айдар упоминается ещё до Екатерины II, но легенда живёт — она говорит о любви людей к родной земле.",
+        sourceName: "История Айдарского сельского поселения",
+        sourceUrl: "https://ajdar-r31.gosweb.gosuslugi.ru/o-munitsipalnom-obrazovanii/istoriya/" },
+
+      { letter: "Б", title: "БЕЛКИНО — ЗЕМЛЯ БЕЛОК",
+        legend: "В давние времена на месте села Белкино шумел густой лес. Говорят, в том лесу водилось видимо-невидимо белок — пушистых, рыжих, с пушистыми хвостами. Белки были первыми жителями этих мест. Местные крестьяне рассказывали, что белки будто бы указывали людям дорогу к родникам и ягодным местам. А ещё говорили: кто белку обидит — удачи в лесу не найдёт. Позже эти земли купил дворянин Наркиз Обнинский. Так и появилось село Белкино — в память о лесных хозяйках.",
+        sourceName: "Государственный архив Российской Федерации",
+        sourceUrl: "https://statearchive.ru" },
+
+      { letter: "В", title: "ВИКТОР ОБНИНСКИЙ — ЩЕДРЫЙ ПОМЕЩИК",
+        legend: "Долгие годы в Обнинске рассказывали: помещик Виктор Петрович Обнинский бесплатно отдал свои земли под строительство железной дороги. За это благодарные люди назвали станцию его фамилией. Позже историки выяснили, что землю отчуждали за плату. Но легенда сохранила память о бескорыстии и щедрости. В 1916 году безымянный разъезд № 15 стал называться Обнинское — в память о Викторе Петровиче.",
+        sourceName: "Большая российская энциклопедия",
+        sourceUrl: "https://old.bigenc.ru" },
+
+      { letter: "Г", title: "ГЛИНА, КОТОРАЯ ПОЁТ",
+        legend: "В деревне Хлуднево Калужской губернии с незапамятных времён лепили из глины удивительные игрушки. Старики говорили: глина в этих местах особая — «дышащая», тёплая. Женщины лепили свистульки-птичек, барынь-грематух и коровок. Верили, что такие игрушки оберегают дом от беды и приносят в семью достаток. А ещё говорили: если слепить птичку и поставить её на окно — в дом прилетит счастье.",
+        sourceName: "Виртуальный Русский музей",
+        sourceUrl: "https://rusmuseumvrm.ru" },
+
+      { letter: "Д", title: "ДУМИНИЧИ — РОДИНА ИГРУШКИ",
+        legend: "Посёлок Думиничи, что в Калужской области, известен на всю страну хлудневской игрушкой. Говорят, что название посёлка связано с именем мастера-гончара Думного, который первым нашёл в этих краях «живую» глину и научил людей лепить из неё посуду и игрушки. Его горшки не трескались в печи и служили людям долгие годы. А игрушки его были такими весёлыми, что дети не хотели с ними расставаться.",
+        sourceName: "Виртуальный Русский музей",
+        sourceUrl: "https://rusmuseumvrm.ru" },
+
+      { letter: "Е", title: "ЕКАТЕРИНА II И ДАР БОЖИЙ",
+        legend: "Рассказывают, что императрица Екатерина II, путешествуя по южным землям, была поражена красотой реки Айдар. «Ай, дар Божий!» — воскликнула она, и с тех пор реку стали называть Айдаром. Хотя историки говорят, что название реки известно задолго до императрицы, в народе эту легенду любят — она о том, как красива родная земля.",
+        sourceName: "История Айдарского сельского поселения",
+        sourceUrl: "https://ajdar-r31.gosweb.gosuslugi.ru/o-munitsipalnom-obrazovanii/istoriya/" },
+
+      { letter: "Ж", title: "ЖИВАЯ ВОДА КИСЕЛЁВОЙ БАЛКИ",
+        legend: "В Киселёвой балке, что под Луганском, бьют из меловых склонов десятки родников. Говорят, вода в них особая — «живая». В 1720 году слепой от рождения мальчик умылся водой из родника — и прозрел. Слух разнёсся по округе, у родника появилась часовня. С тех пор люди приходят сюда за исцелением. А ещё рассказывают: кто с чистым сердцем придёт — тот исцелится, кто с нечистым — беду навлечёт.",
+        sourceName: "Комсомольская правда — Луганск",
+        sourceUrl: "https://www.lugansk.kp.ru/daily/27767.5/5225522/" },
+
+      { letter: "З", title: "ЗМЕИ ЗАПОРОЖСКИХ СТЕПЕЙ",
+        legend: "В запорожских степях рассказывали о страшных змеях-богатырях. Говорили, что жили они в пещерах у порогов Днепра. Один змей — о трёх головах — обитал на острове Хортица. Люди боялись его и обходили стороной. А ещё рассказывали: там, где змей проползал, оставался глубокий след — так появились балки и реки.",
+        sourceName: "Новицкий Я.П. «Народная память о Запорожье» (1911)",
+        sourceUrl: "https://archive.org/details/o._20200408" },
+
+      { letter: "И", title: "ИСЦЕЛЕНИЕ У ПЯТИ БРАТЬЕВ",
+        legend: "В начале 1920-х годов в Киселёвой балке, у старого дерева, которое казаки называли «Пять братьев», людям явилась Богородица. Она парила над землёй в столпе света, а лицо её было печально. Там, где она стояла, забил новый родник — и вода в нём оказалась целебной. С тех пор это место почитают как святое.",
+        sourceName: "Комсомольская правда — Луганск",
+        sourceUrl: "https://www.lugansk.kp.ru/daily/27767.5/5225522/" },
+
+      { letter: "К", title: "КАМЕННЫЕ БАБЫ",
+        legend: "В запорожских степях стоят каменные изваяния — «бабы». Старики рассказывали, что это вовсе не изваяния, а окаменевшие древние народы. Будто бы жили здесь великаны, которые прогневали небо, и оно обратило их в камень. С тех пор стоят они в степи — молчаливые свидетели древних времён. Название «баба» произошло от тюркского слова «предок».",
+        sourceName: "Новицкий Я.П. «Народная память о Запорожье» (1911)",
+        sourceUrl: "https://archive.org/details/o._20200408" },
+
+      { letter: "Л", title: "ЛЕГЕНДА — ПАМЯТЬ НАРОДА",
+        legend: "Само слово «легенда» означает «то, что следует прочитать». В древности так называли жития святых, которые читали в храмах. Позже легендами стали называть народные предания — о героях, о чудесах, о зарытых кладах. Легенда не всегда говорит правду, но она всегда хранит память народа о том, что для него важно.",
+        sourceName: "Гошкевич В.И. «Клады и древности Херсонской губернии» (1903)",
+        sourceUrl: "https://library.kr.ua/wp-content/elib/goshkevich/goshkevich-klady.pdf" },
+
+      { letter: "М", title: "МАМАЙ — ЗАЩИТНИК ЗЕМЛИ",
+        legend: "В херсонских степях рассказывали о казаке Мамае — могучем воине, который защищал родную землю от врагов. Говорили, что он мог один выйти против целого войска и победить. А ещё рассказывали: Мамай появляется внезапно, когда люди попадают в беду, спасает их — и так же внезапно исчезает. Пули его не берут — он их вытряхивает из одежды.",
+        sourceName: "Гошкевич В.И. «Клады и древности Херсонской губернии» (1903)",
+        sourceUrl: "https://library.kr.ua/wp-content/elib/goshkevich/goshkevich-klady.pdf" },
+
+      { letter: "Н", title: "НАРОДНАЯ ПАМЯТЬ",
+        legend: "У каждого народа есть своя память — песни, сказки, предания. В запорожских степях эту память собирал этнограф Яков Новицкий. Он ходил от села к селу и записывал рассказы стариков — о змеях, о каменных бабах, о казацких атаманах. Благодаря ему мы сегодня знаем, о чём мечтали и во что верили наши предки.",
+        sourceName: "Новицкий Я.П. «Народная память о Запорожье» (1911)",
+        sourceUrl: "https://archive.org/details/o._20200408" },
+
+      { letter: "О", title: "ОБНИНСК — ИМЯ НА КАРТЕ",
+        legend: "В 1916 году железнодорожную станцию назвали Обнинское — по фамилии помещиков Обнинских, владевших селом Белкино. Долгие годы ходила легенда, будто Виктор Обнинский бесплатно отдал землю под дорогу. Историки это опровергли, но легенда осталась — она о том, что люди помнят доброту и щедрость. А фамилия Обнинских, кстати, происходит от польского слова, означающего «низкое место».",
+        sourceName: "АиФ-Калуга — Засекреченный разъезд",
+        sourceUrl: "https://kaluga.aif.ru/society/details/zasekrechennyy_razezd_kak_rodilos_nazvanie_pervogo_naukograda_strany" },
+
+      { letter: "П", title: "ПЯТЬ БРАТЬЕВ",
+        legend: "В Киселёвой балке росло старое дерево — пять вековых стволов, сросшихся у основания. Казаки называли его «Пять братьев». Говорили, что дерево это не простое: под ним молились, у него просили заступничества. А в 1920-е годы именно здесь людям явилась Богородица — и на том месте забил новый родник.",
+        sourceName: "Комсомольская правда — Луганск",
+        sourceUrl: "https://www.lugansk.kp.ru/daily/27767.5/5225522/" },
+
+      { letter: "Р", title: "РЕМЕСЛО — ЖИВАЯ ПАМЯТЬ",
+        legend: "В калужских деревнях говорили: «Ремесло — не коромысло, плеч не оттянет, а хлеб принесёт». Хлудневские мастерицы лепили игрушки из глины, ткачихи ткали холсты, кузнецы ковали подковы. Старики учили: «Кто ремесло знает — тот с голоду не помрёт». И передавали своё умение детям и внукам — из рук в руки, из поколения в поколение. Так рождались трудовые династии.",
+        sourceName: "Виртуальный Русский музей",
+        sourceUrl: "https://rusmuseumvrm.ru" },
+
+      { letter: "С", title: "САУР-МОГИЛА",
+        legend: "В донецкой степи возвышается курган Саур-Могила. Старики рассказывали, что насыпали его казаки над могилой своего атамана Саура. Когда враги подступали к кургану, из-под земли слышался гул — будто войско идёт. Казаки верили: Саур и его воины не ушли, а спят под курганом и встанут, если родной земле будет грозить беда.",
+        sourceName: "Донецкое агентство новостей",
+        sourceUrl: "https://dan-news.ru" },
+
+      { letter: "Т", title: "ТОПОНИМ — ИМЯ ЗЕМЛИ",
+        legend: "У каждой реки, горы и села есть своё имя. Учёные называют такие имена «топонимами» — от греческих слов «место» и «имя». Народ говорил: «Без имени и земля — сирота». Названия хранят память о людях и событиях: река Айдар — о хане, село Белкино — о лесных белках, город Обнинск — о помещиках Обнинских. Имя земли — это её биография.",
+        sourceName: "Большая российская энциклопедия",
+        sourceUrl: "https://old.bigenc.ru" },
+
+      { letter: "У", title: "УГОЛЬ — ЧЁРНОЕ ЗОЛОТО",
+        legend: "В донбасских шахтах говорили: «Уголь — чёрное золото». Шахтёры верили, что под землёй живёт свой хозяин — Добрый Шубин. Он не любит жадных и злых. Если шахтёр работает честно, Шубин подскажет, где искать хороший пласт. А если кто-то замышляет дурное — заведёт в тупик. Уголь — богатство, но добывается он трудом и потом.",
+        sourceName: "Донецкое агентство новостей",
+        sourceUrl: "https://dan-news.ru" },
+
+      { letter: "Ф", title: "ФОЛЬКЛОР — НАРОДНАЯ МУДРОСТЬ",
+        legend: "Слово «фольклор» означает «народная мудрость». Это песни, сказки, пословицы, предания — всё, что народ создавал веками и передавал из уст в уста. В запорожских степях фольклор собирал этнограф Яков Новицкий. Он записывал рассказы стариков о змеях, каменных бабах и казацких атаманах. Благодаря ему мы слышим голос прошлого.",
+        sourceName: "Новицкий Я.П. «Народная память о Запорожье» (1911)",
+        sourceUrl: "https://archive.org/details/o._20200408" },
+
+      { letter: "Х", title: "ХОРТИЦА — ОСТРОВ ГЕРОЕВ",
+        legend: "На острове Хортица, что на Днепре, по преданию, жил трёхголовый змей. Казаки рассказывали, что на этом острове собирались запорожские герои и что земля здесь хранит их силу. Говорили: кто с чистым сердцем ступит на Хортицу — наберётся богатырской силы. А кто с дурным умыслом — заблудится и не найдёт дороги назад.",
+        sourceName: "Новицкий Я.П. «Народная память о Запорожье» (1911)",
+        sourceUrl: "https://archive.org/details/o._20200408" },
+
+      { letter: "Ц", title: "ЦЕЛЕБНЫЙ ИСТОЧНИК",
+        legend: "В Киселёвой балке, что под Луганском, бьют из меловых склонов родники. Говорят, вода в них особая — целебная. В 1720 году слепой от рождения мальчик умылся водой из родника — и прозрел. Слух разнёсся по округе, у источника поставили часовню. С тех пор люди приходят сюда за исцелением — и верят, что вода помогает тем, кто приходит с добрым сердцем.",
+        sourceName: "Комсомольская правда — Луганск",
+        sourceUrl: "https://www.lugansk.kp.ru/daily/27767.5/5225522/" },
+
+      { letter: "Ч", title: "ЧУДО ЯВЛЕНИЯ",
+        legend: "В начале 1920-х годов в Киселёвой балке, у дерева «Пять братьев», людям явилась Богородица. Она парила над землёй в столпе света, а лицо её было печально. Там, где она стояла, забил новый родник — и вода оказалась целебной. С тех пор это место почитают как святое. Люди говорят: чудеса случаются там, где их ждут с верой и надеждой.",
+        sourceName: "Комсомольская правда — Луганск",
+        sourceUrl: "https://www.lugansk.kp.ru/daily/27767.5/5225522/" },
+
+      { letter: "Ш", title: "ШУБИН — ДОБРЫЙ ДУХ ШАХТЫ",
+        legend: "В донбасских шахтах рассказывали о Добром Шубине — старом шахтёре, который предупреждает горняков об опасности. Он может стукнуть, кашлянуть, засмеяться — и опытные шахтёры сразу говорят: «Уходим». Если слышен стук в забое — быть обвалу. Если смех — беда миновала. Шубин — не призрак, а хранитель. Он заботится о тех, кто честно работает под землёй.",
+        sourceName: "Донецкое агентство новостей",
+        sourceUrl: "https://dan-news.ru" },
+
+      { letter: "Щ", title: "ЩЕДРОСТЬ ОБНИНСКОГО",
+        legend: "Долгие годы в Обнинске рассказывали: помещик Виктор Обнинский бесплатно отдал землю под железную дорогу. За это люди назвали станцию его фамилией. Историки выяснили — это легенда. Но народная память сохранила её, потому что щедрость и бескорыстие всегда ценились на Руси. Легенда учит: доброе дело живёт в памяти дольше, чем богатство.",
+        sourceName: "АиФ-Калуга — Засекреченный разъезд",
+        sourceUrl: "https://kaluga.aif.ru/society/details/zasekrechennyy_razezd_kak_rodilos_nazvanie_pervogo_naukograda_strany" },
+
+      { letter: "Ъ", title: "ТВЁРДЫЙ ЗНАК — ОПОРА СЛОВА",
+        legend: "В старой азбуке букву «Ъ» называли «ер». Она стояла в конце многих слов и была самой дорогой буквой: за неё платили, как за обычную. Говорили: «Без опоры и слово не стоит». Твёрдый знак — как фундамент дома: его не видно, но на нём держится всё строение. Так и в жизни: незаметный труд и терпение держат большие дела.",
+        sourceName: "Большая российская энциклопедия",
+        sourceUrl: "https://old.bigenc.ru" },
+
+      { letter: "Ы", title: "Ы — ГОЛОС НАРОДА",
+        legend: "Буква «Ы» есть не во всех языках. Говорят, что в старину её называли «еры» и что она звучит как вздох — «ы-ы-ы». В народе шутили: «Ы — не буква, а песня». Она встречается в самых важных словах: «мы», «вы», «быть», «жить». Без неё не сказать: «Мы — одна страна». Вот такая маленькая, но нужная буква.",
+        sourceName: "Новицкий Я.П. «Народная память о Запорожье» (1911)",
+        sourceUrl: "https://archive.org/details/o._20200408" },
+
+      { letter: "Ь", title: "МЯГКИЙ ЗНАК — ДОБРОТА РЕЧИ",
+        legend: "Мягкий знак не имеет звука, но без него слова становятся твёрдыми и холодными: «моль» — не «мол», «соль» — не «сол». В народе говорили: «Мягкое слово и кость ломит». Мягкий знак в азбуке — как доброта в человеке: его не слышно, но с ним теплее. Учат с детства: говори мягко, а думай твёрдо.",
+        sourceName: "Государственный архив Российской Федерации",
+        sourceUrl: "https://statearchive.ru" },
+
+      { letter: "Э", title: "ЭТНОГРАФ — ХРАНИТЕЛЬ ПАМЯТИ",
+        legend: "Этнограф — это человек, который изучает народную жизнь: обычаи, песни, предания. В запорожских степях таким хранителем памяти был Яков Новицкий. Он ходил от села к селу, записывал рассказы стариков. Благодаря ему мы знаем легенды о змеях, каменных бабах и казацких атаманах. Этнограф — это мост между прошлым и будущим.",
+        sourceName: "Новицкий Я.П. «Народная память о Запорожье» (1911)",
+        sourceUrl: "https://archive.org/details/o._20200408" },
+
+      { letter: "Ю", title: "ЮГ — ТЁПЛЫЙ КРАЙ",
+        legend: "Юг — это тёплые степи, ласковое солнце и бескрайние поля. В запорожских и херсонских степях говорили: «Юг — всему свету друг». Здесь растёт пшеница, зреют арбузы, пасутся отары. Юг кормит всю страну. А ещё юг — это край, где жили казаки, где рождались легенды о воле и братстве. Юг — это тепло не только от солнца, но и от людей.",
+        sourceName: "Гошкевич В.И. «Клады и древности Херсонской губернии» (1903)",
+        sourceUrl: "https://library.kr.ua/wp-content/elib/goshkevich/goshkevich-klady.pdf" },
+
+      { letter: "Я", title: "ЯЗЫК — ДУША НАРОДА",
+        legend: "Язык — это то, что отличает один народ от другого. В языке живут песни, сказки, пословицы, легенды. Говорили: «Язык — душа народа». Когда народ теряет язык — он теряет память. А когда хранит — передаёт её детям и внукам. Поэтому так важно говорить на родном языке, читать сказки, петь песни. Язык — это нить, связывающая поколения.",
+        sourceName: "Большая Российская энциклопедия — Русский язык",
+        sourceUrl: "https://old.bigenc.ru" }
+    ];
+
+    /* ========== ЛОГИКА ========== */
+    let currentIndex = 0;
+    let isSpeaking = false;
+
+    function startReading() {
+      document.getElementById('cover').style.display = 'none';
+      document.getElementById('book').style.display = 'block';
+      buildAlphabet();
+      renderLetter(0);
+    }
+
+    function buildAlphabet() {
+      const nav = document.getElementById('alphabetNav');
+      nav.innerHTML = '';
+      lettersData.forEach((item, i) => {
+        const btn = document.createElement('button');
+        btn.textContent = item.letter;
+        btn.onclick = () => {
+          stopSpeak(); // Останавливаем озвучку при смене буквы
+          currentIndex = i;
+          renderLetter(i);
+        };
+        btn.id = 'alpha-' + i;
+        nav.appendChild(btn);
+      });
+    }
+
+    function renderLetter(index) {
+      const item = lettersData[index];
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(item.sourceUrl)}`;
+
+      document.querySelectorAll('.alphabet button').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById('alpha-' + index);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      document.getElementById('card').innerHTML = `
+        <div class="big-letter">${item.letter}</div>
+        <div class="legend-title">${item.title}</div>
+        <div class="content-grid">
+          <div class="legend-text">${item.legend}</div>
+          <div class="side-panel">
+            <div class="qr-label">Источник</div>
+            <img src="${qrUrl}" alt="QR-код источника">
+            <div class="source-box">
+              ${item.sourceName}<br>
+              <a href="${item.sourceUrl}" target="_blank">Проверить</a>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('prevBtn').disabled = (index === 0);
+      document.getElementById('nextBtn').disabled = (index === lettersData.length - 1);
+      document.getElementById('counter').textContent = `Буква ${index + 1} из ${lettersData.length}`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextLetter() {
+      if (currentIndex < lettersData.length - 1) {
+        stopSpeak();
+        currentIndex++;
+        renderLetter(currentIndex);
+      }
+    }
+
+    function prevLetter() {
+      if (currentIndex > 0) {
+        stopSpeak();
+        currentIndex--;
+        renderLetter(currentIndex);
+      }
+    }
+
+    /* ========== 1. СКАЧАТЬ PDF ========== */
+    function downloadPDF() {
+      // Открывает диалог печати браузера.
+      // В окне печати выберите "Сохранить как PDF".
+      window.print();
+    }
+
+    /* ========== 2. ОЗВУЧИВАНИЕ ЛЕГЕНД ========== */
+    function toggleSpeak() {
+      if (isSpeaking) {
+        stopSpeak();
+      } else {
+        speakCurrent();
+      }
+    }
+
+    function speakCurrent() {
+      if (!('speechSynthesis' in window)) {
+        alert('Извините, ваш браузер не поддерживает озвучивание. Попробуйте Chrome или Edge.');
+        return;
+      }
+
+      // Останавливаем предыдущую речь, если была
+      window.speechSynthesis.cancel();
+
+      const item = lettersData[currentIndex];
+      const text = `${item.title}. ${item.legend}`;
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ru-RU';
+      utterance.rate = 0.95;      // Скорость (0.1 – 10)
+      utterance.pitch = 1;         // Тон (0 – 2)
+      utterance.volume = 1;        // Громкость (0 – 1)
+
+      // Пытаемся найти русский голос
+      const voices = window.speechSynthesis.getVoices();
+      const ruVoice = voices.find(v => v.lang.startsWith('ru'));
+      if (ruVoice) utterance.voice = ruVoice;
+
+      utterance.onstart = () => {
+        isSpeaking = true;
+        updateSpeakButton();
+      };
+      utterance.onend = () => {
+        isSpeaking = false;
+        updateSpeakButton();
+      };
+      utterance.onerror = () => {
+        isSpeaking = false;
+        updateSpeakButton();
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function stopSpeak() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      isSpeaking = false;
+      updateSpeakButton();
+    }
+
+    function updateSpeakButton() {
+      const btn = document.getElementById('speakBtn');
+      if (!btn) return;
+      if (isSpeaking) {
+        btn.textContent = '⏸ Пауза';
+        btn.classList.add('active');
+      } else {
+        btn.textContent = '🔊 Озвучить легенду';
+        btn.classList.remove('active');
+      }
+    }
+
+    // Загружаем голоса заранее (некоторые браузеры подгружают их асинхронно)
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    }
+
+    // Навигация стрелками клавиатуры
+    document.addEventListener('keydown', (e) => {
+      if (document.getElementById('book').style.display === 'none') return;
+      if (e.key === 'ArrowRight') nextLetter();
+      if (e.key === 'ArrowLeft') prevLetter();
+    });
+  </script>
+
+</body>
+</html>
